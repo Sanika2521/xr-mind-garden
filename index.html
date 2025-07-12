@@ -2,25 +2,69 @@
 <html>
   <head>
     <title>XR Mind Garden</title>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <style>
+      #thoughtInput {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        padding: 12px 20px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: 2px solid #8E44AD;
+        background: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
   </head>
-  <body>
-    <a-scene>
-      <a-sky color="#D0F0C0"></a-sky>
 
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#87cbb9"></a-plane>
+  <body>
+    <!-- Input box -->
+    <input type="text" id="thoughtInput" placeholder="I am grateful for..." />
+
+    <!-- XR Scene -->
+    <a-scene>
+      <!-- Cursor (for clicking) -->
+      <a-entity cursor="rayOrigin: mouse" raycaster="objects: .clickable"></a-entity>
+
+      <!-- Background Sky & Ground -->
+      <a-sky color="#D0F0C0"></a-sky>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="12" height="12" color="#87cbb9"></a-plane>
 
       <!-- Flower -->
-      <a-sphere id="flower" radius="0.3" color="#FF69B4" position="0 1 -3" visible="false"
-        animation="property: scale; to: 1 1 1; dur: 1000; easing: easeInOutQuad">
+      <a-sphere id="flower" radius="0.3" color="#FF69B4" position="0 1.2 -3"
+        visible="false"
+        scale="0.01 0.01 0.01"
+        animation="property: scale; to: 1 1 1; dur: 1200; easing: easeInOutElastic">
       </a-sphere>
 
-      <!-- Trigger Button -->
-      <a-box position="0 0.5 -2" depth="0.5" height="0.3" width="1.2" color="#8E44AD"
-        onclick="document.querySelector('#flower').setAttribute('visible', true)">
-        <a-text value="Plant Thought" position="-0.5 0 0.3" color="white"></a-text>
+      <!-- Thought Text -->
+      <a-text id="thoughtText" value="" position="0 2 -3" align="center" color="#000" width="4" visible="false"></a-text>
+
+      <!-- Purple Plant Button -->
+      <a-box class="clickable" color="#8E44AD" position="0 0.5 -2" width="2" height="0.5" depth="0.3"
+        onclick="plantThought()">
+        <a-text value="Plant Thought" position="-0.7 0 0.2" color="#fff" align="center"></a-text>
       </a-box>
     </a-scene>
+
+    <!-- JavaScript -->
+    <script>
+      function plantThought() {
+        const input = document.getElementById("thoughtInput").value;
+        const flower = document.getElementById("flower");
+        const text = document.getElementById("thoughtText");
+
+        if (input.trim() !== "") {
+          flower.setAttribute("visible", true);
+          text.setAttribute("value", input);
+          text.setAttribute("visible", true);
+        }
+      }
+    </script>
   </body>
 </html>
